@@ -25,6 +25,7 @@ async function run() {
     await client.connect();
     const db = client.db("mediqueue");
     const collection = db.collection("tutors");
+    const bookingCollection = db.collection("bookings");
 
     app.get('/tutors', async (req, res) => {
         const cursor = collection.find();
@@ -46,7 +47,7 @@ async function run() {
             { _id: new ObjectId(id) },
             {$set: updatedTutor}
         )
-        res.send(result);
+        res.send(result); 
     })
     app.delete('/tutors/:id', async (req, res) => {
         const id = req.params.id;
@@ -65,6 +66,24 @@ async function run() {
         res.send(result);
     })
 
+    app.get("/bookings/:userId", async (req,res)=>{
+        const {userId} = req.params;
+        const result = await bookingCollection.find({userId}).toArray();
+        res.send(result);
+    })
+
+    app.post('/bookings', async (req, res) => {
+    const booking = req.body;
+    const result = await bookingCollection.insertOne(booking);
+    res.send(result);
+})
+
+    app.delete('/bookings/:id',async (req,res)=>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await bookingCollection.deleteOne(query);
+        res.send(result);
+    })
 
     
     await client.db("admin").command({ ping: 1 });
