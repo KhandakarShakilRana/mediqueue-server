@@ -71,7 +71,8 @@ async function run() {
         const result = await bookingCollection.find({userId}).toArray();
         res.send(result);
     })
-
+ 
+    
     app.post('/bookings', async (req, res) => {
     const booking = req.body;
     const result = await bookingCollection.insertOne(booking);
