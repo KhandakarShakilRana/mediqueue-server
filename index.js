@@ -72,12 +72,13 @@ async function run() {
         res.send(result);
     })
  
-    
+
     app.post('/bookings', async (req, res) => {
     const booking = req.body;
     const result = await bookingCollection.insertOne(booking);
     res.send(result);
 })
+
 
     app.delete('/bookings/:id',async (req,res)=>{
         const id = req.params.id;
