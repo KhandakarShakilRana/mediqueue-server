@@ -10,7 +10,14 @@ const uri = process.env.MONGODB_URI;
 const app = express();
 const port = 5000
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://mediqueue-server-theta.vercel.app"
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json())
 
 const client = new MongoClient(uri, {
@@ -53,7 +60,7 @@ async function run() {
         const id = req.params.id;
         const query = { _id: new ObjectId(id) };
         const result = await collection.deleteOne(query);
-        res.send(result);
+        await res.json();
     })
      
 
